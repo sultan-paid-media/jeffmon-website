@@ -1,0 +1,150 @@
+/* RESET */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* VARIABLES */
+:root {
+  --navy: #0a1628;
+  --navy-mid: #0f2040;
+  --gold: #c9a96e;
+  --cream: #f0ead8;
+  --text-muted: #7a8599;
+  --white: #ffffff;
+}
+
+/* BASE */
+body {
+  background: var(--navy);
+  color: var(--cream);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  line-height: 1.7;
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section {
+  padding: 6rem 0;
+}
+
+.dark {
+  background: var(--navy-mid);
+}
+
+.center {
+  text-align: center;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  width: 100%;
+  padding: 1.5rem 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(10,22,40,0.95);
+}
+
+.nav-logo {
+  font-family: 'Cormorant Garamond', serif;
+  color: var(--gold);
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+}
+
+.nav-links a {
+  color: var(--cream);
+  text-decoration: none;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+/* HERO */
+.hero {
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.hero h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 3rem;
+  margin: 1rem 0;
+}
+
+.hero em {
+  color: var(--gold);
+  font-style: italic;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  color: var(--gold);
+  letter-spacing: 0.2em;
+}
+
+.lead {
+  max-width: 600px;
+  margin-bottom: 2rem;
+}
+
+/* BUTTONS */
+.btn-outline {
+  border: 1px solid var(--gold);
+  padding: 0.8rem 2rem;
+  color: var(--gold);
+  text-decoration: none;
+}
+
+.btn-solid {
+  background: var(--gold);
+  color: var(--navy);
+  padding: 1rem 2.5rem;
+  text-decoration: none;
+}
+
+/* GRID */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+}
+
+footer {
+  padding: 2rem 0;
+  background: #070f1e;
+}
+
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+@media (max-width: 900px) {
+  .two-col {
+    grid-template-columns: 1fr;
+  }
+
+  .nav-links {
+    display: none;
+  }
+}
