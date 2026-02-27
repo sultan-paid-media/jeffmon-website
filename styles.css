@@ -219,6 +219,245 @@ margin-bottom: 1.5rem;
 }
 .section-title em { font-style: italic; color: var(--gold); }
 
+/* ── STOCKS SECTION ── */
+#stocks {
+  background: linear-gradient(180deg, #0d0d0d 0%, #111111 100%);
+  padding: 8rem 5vw;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.stocks-glow {
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 400px;
+  background: radial-gradient(ellipse, rgba(201,168,76,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.stocks-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* ── STOCKS HEADER ── */
+.stocks-header {
+  margin-bottom: 3.5rem;
+}
+
+.stocks-label {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.62rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: #c9a84c;
+  margin-bottom: 1.5rem;
+}
+
+.stocks-label-line {
+  width: 30px;
+  height: 1px;
+  background: #c9a84c;
+}
+
+.stocks-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  font-weight: 300;
+  color: #ffffff;
+  line-height: 1.15;
+  margin: 0 0 1rem;
+}
+
+.stocks-title em {
+  font-style: italic;
+  color: #c9a84c;
+}
+
+.stocks-subtitle {
+  font-size: 0.83rem;
+  line-height: 1.9;
+  color: #b0a080;
+  max-width: 580px;
+  margin: 0;
+}
+
+/* ── LIVE BADGE ── */
+.stocks-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+#live-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4caf7d;
+  animation: pulse-dot 2s infinite;
+}
+
+.live-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #4caf7d;
+}
+
+#last-updated {
+  font-size: 0.68rem;
+  color: #6a6050;
+  letter-spacing: 0.1em;
+}
+
+/* ── TABLE ── */
+.stocks-table-wrap {
+  overflow-x: auto;
+}
+
+#stock-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  min-width: 700px;
+}
+
+#stock-table thead tr {
+  border-bottom: 1px solid rgba(201,168,76,0.25);
+}
+
+#stock-table th {
+  padding: 1rem 1.2rem;
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #c9a84c;
+  font-weight: 500;
+}
+
+#stock-table th:first-child { text-align: left; }
+#stock-table th:nth-child(2) { text-align: center; }
+#stock-table th:nth-child(3),
+#stock-table th:nth-child(4),
+#stock-table th:nth-child(5),
+#stock-table th:nth-child(6) { text-align: right; }
+#stock-table th:last-child { text-align: center; }
+
+#stock-tbody tr {
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  transition: background 0.2s;
+}
+
+#stock-tbody tr:hover {
+  background: rgba(201,168,76,0.04);
+}
+
+#stock-tbody td {
+  padding: 1.1rem 1.2rem;
+  color: #b0a080;
+  vertical-align: middle;
+}
+
+#stock-tbody td:first-child { color: #f0e6cc; }
+
+.company-name {
+  font-weight: 400;
+  color: #f0e6cc;
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.company-sector {
+  font-size: 0.65rem;
+  color: #6a6050;
+  letter-spacing: 0.05em;
+}
+
+.ticker-cell {
+  text-align: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  color: #c9a84c;
+  letter-spacing: 0.05em;
+}
+
+.price-cell { text-align: right; }
+.change-cell { text-align: right; }
+.mcap-cell { text-align: right; }
+.pe-cell { text-align: right; }
+.conviction-cell { text-align: center; }
+
+/* ── BADGES & STATES ── */
+.conviction-badge {
+  display: inline-block;
+  padding: 0.25rem 0.85rem;
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 600;
+  border-radius: 2px;
+}
+
+.conviction-high {
+  background: rgba(201,168,76,0.12);
+  color: #c9a84c;
+  border: 1px solid rgba(201,168,76,0.3);
+}
+
+.change-positive { color: #5cba7d; font-weight: 500; }
+.change-negative { color: #e07070; font-weight: 500; }
+.change-neutral  { color: #b0a080; }
+
+.change-sub {
+  font-size: 0.7rem;
+  color: #6a6050;
+  display: block;
+  margin-top: 0.15rem;
+}
+
+.price-value {
+  color: #f0e6cc;
+  font-weight: 500;
+}
+
+.data-empty { color: #4a4035; }
+
+/* ── DISCLAIMER ── */
+.stocks-disclaimer {
+  font-size: 0.65rem;
+  color: #4a4035;
+  line-height: 1.7;
+  margin-top: 2rem;
+  font-style: italic;
+  text-align: center;
+  border-top: 1px solid rgba(201,168,76,0.08);
+  padding-top: 1.5rem;
+}
+
+/* ── ANIMATION ── */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+
 /* ── ABOUT ── */
 #about {
 background: linear-gradient(180deg, var(--navy) 0%, var(--navy-mid) 100%);

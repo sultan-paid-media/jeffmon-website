@@ -52,7 +52,72 @@
   </div>
 </section>
 
-<!-- ABOUT -->
+<!-- STOCKS -->
+ 
+<section id="stocks">
+
+  <!-- Gold glow background -->
+  <div class="stocks-glow"></div>
+
+  <div class="stocks-inner">
+
+    <!-- Header -->
+    <div class="stocks-header">
+      <div class="stocks-label">
+        <div class="stocks-label-line"></div>
+        Stock Universe
+      </div>
+      <h2 class="stocks-title">
+        Our <em>Magnificent 7</em> Coverage
+      </h2>
+      <p class="stocks-subtitle">
+        High-conviction positions in the world's most transformative technology companies.
+        Prices update live every 60 seconds during market hours.
+      </p>
+    </div>
+
+    <!-- Live badge + last updated -->
+    <div class="stocks-meta">
+      <div class="live-indicator">
+        <span id="live-dot"></span>
+        <span class="live-label">Live Data</span>
+      </div>
+      <span id="last-updated">Fetching prices...</span>
+    </div>
+
+    <!-- Table -->
+    <div class="stocks-table-wrap">
+      <table id="stock-table">
+        <thead>
+          <tr>
+            <th>Company</th>
+            <th>Ticker</th>
+            <th>Price (USD)</th>
+            <th>Day Change</th>
+            <th>Market Cap</th>
+            <th>P/E Ratio</th>
+            <th>Conviction</th>
+          </tr>
+        </thead>
+        <tbody id="stock-tbody">
+          <tr>
+            <td colspan="7" style="padding:3rem; text-align:center; color:#6a6050; font-size:0.8rem; letter-spacing:0.1em;">
+              Loading live market data...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Disclaimer -->
+    <p class="stocks-disclaimer">
+      Market data sourced from Yahoo Finance. Prices delayed up to 15 minutes.
+      Conviction ratings reflect JeffMon's internal research views and do not constitute investment advice.
+    </p>
+
+  </div>
+</section>
+
 <section id="about">
   <div class="about-inner">
     <div class="about-text reveal">
