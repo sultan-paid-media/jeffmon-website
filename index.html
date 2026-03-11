@@ -3,452 +3,345 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JeffMon Alternative Investments</title>
+  <title>Under Maintenance — JeffMon Alternative Investments</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,200;0,300;0,400;0,600;1,200;1,300;1,400&family=Cinzel:wght@400;600&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,200;0,300;0,400;1,200;1,300;1,400&family=Cinzel:wght@400;600&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ── RESET & ROOT ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:   #080808;
+      --black2:  #0f0f0f;
+      --black3:  #161616;
+      --gold:    #c9a84c;
+      --gold2:   #e8c96a;
+      --cream:   #f0e6cc;
+      --cream2:  #b0a080;
+      --muted:   #5a5040;
+      --white:   #ffffff;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--black);
+      color: var(--cream);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300;
+      overflow: hidden;
+      cursor: none;
+    }
+
+    /* ── CUSTOM CURSOR ── */
+    #cursor {
+      position: fixed; width: 8px; height: 8px;
+      background: var(--gold); border-radius: 50%;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.12s, width 0.3s, height 0.3s;
+    }
+    #cursor-ring {
+      position: fixed; width: 34px; height: 34px;
+      border: 1px solid rgba(201,168,76,0.45); border-radius: 50%;
+      pointer-events: none; z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: width 0.3s, height 0.3s;
+    }
+
+    /* ── NOISE GRAIN ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.022; pointer-events: none; z-index: 9000;
+    }
+
+    /* ── BACKGROUND LAYERS ── */
+    .bg-radial {
+      position: fixed; inset: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 70% 60% at 50% 50%, rgba(201,168,76,0.045) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 40% at 15% 85%, rgba(201,168,76,0.02) 0%, transparent 55%),
+        radial-gradient(ellipse 30% 30% at 85% 15%, rgba(201,168,76,0.015) 0%, transparent 50%);
+    }
+
+    /* ── ROTATING RINGS ── */
+    .ring {
+      position: fixed; border-radius: 50%;
+      border: 1px solid rgba(201,168,76,0.07);
+      top: 50%; left: 50%;
+      pointer-events: none;
+    }
+    .ring-1 { width: 800px; height: 800px; margin: -400px 0 0 -400px; animation: spin 70s linear infinite; }
+    .ring-2 { width: 560px; height: 560px; margin: -280px 0 0 -280px; animation: spin 45s linear infinite reverse; border-style: dashed; border-color: rgba(201,168,76,0.05); }
+    .ring-3 { width: 340px; height: 340px; margin: -170px 0 0 -170px; animation: spin 28s linear infinite; }
+
+    /* ── CORNER BRACKETS ── */
+    .corner {
+      position: fixed; width: 44px; height: 44px;
+      opacity: 0; animation: fadeUp 1s 1.1s ease forwards;
+    }
+    .c-tl { top: 1.8rem; left: 1.8rem; border-top: 1px solid rgba(201,168,76,0.35); border-left: 1px solid rgba(201,168,76,0.35); }
+    .c-tr { top: 1.8rem; right: 1.8rem; border-top: 1px solid rgba(201,168,76,0.35); border-right: 1px solid rgba(201,168,76,0.35); }
+    .c-bl { bottom: 1.8rem; left: 1.8rem; border-bottom: 1px solid rgba(201,168,76,0.35); border-left: 1px solid rgba(201,168,76,0.35); }
+    .c-br { bottom: 1.8rem; right: 1.8rem; border-bottom: 1px solid rgba(201,168,76,0.35); border-right: 1px solid rgba(201,168,76,0.35); }
+
+    /* ── LOGO ── */
+    .logo {
+      position: fixed; top: 2rem; left: 50%; transform: translateX(-50%);
+      font-family: 'Cinzel', serif;
+      font-size: 0.82rem; letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--gold); text-decoration: none;
+      opacity: 0; animation: fadeDown 0.9s 0.2s ease forwards;
+      white-space: nowrap;
+    }
+
+    /* ── MAIN WRAPPER ── */
+    .wrapper {
+      position: relative; z-index: 10;
+      height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      gap: 0;
+    }
+
+    /* ── SYMBOL ── */
+    .symbol {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem; color: rgba(201,168,76,0.5);
+      letter-spacing: 0.3em;
+      margin-bottom: 1.8rem;
+      opacity: 0; animation: fadeUp 0.9s 0.35s ease forwards;
+    }
+
+    /* ── EYEBROW ── */
+    .eyebrow {
+      display: flex; align-items: center; justify-content: center; gap: 1rem;
+      font-size: 0.55rem; letter-spacing: 0.4em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1.6rem;
+      opacity: 0; animation: fadeUp 0.9s 0.45s ease forwards;
+    }
+    .eyebrow::before, .eyebrow::after {
+      content: ''; display: block; width: 28px; height: 1px; background: var(--gold);
+    }
+
+    /* ── MAIN HEADING ── */
+    .heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.4rem, 5.5vw, 5rem);
+      font-weight: 200; line-height: 1.1; color: var(--white);
+      margin-bottom: 0.5rem;
+      opacity: 0; animation: fadeUp 0.9s 0.55s ease forwards;
+    }
+    .heading em { font-style: italic; color: var(--gold); }
+
+    /* ── SUBHEADING ── */
+    .subheading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.2rem, 2.5vw, 2rem);
+      font-weight: 200; font-style: italic;
+      color: var(--cream2); margin-bottom: 2.2rem;
+      opacity: 0; animation: fadeUp 0.9s 0.62s ease forwards;
+    }
+
+    /* ── GOLD LINE ── */
+    .gold-line {
+      width: 60px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 0 auto 2.2rem;
+      opacity: 0; animation: fadeUp 0.9s 0.68s ease forwards;
+    }
+
+    /* ── BODY TEXT ── */
+    .body-text {
+      font-size: 0.8rem; line-height: 2; color: var(--cream2);
+      max-width: 460px; margin: 0 auto 2.8rem;
+      opacity: 0; animation: fadeUp 0.9s 0.75s ease forwards;
+    }
+
+    /* ── PROGRESS BAR ── */
+    .progress-wrap {
+      width: 260px; margin: 0 auto 2.8rem;
+      opacity: 0; animation: fadeUp 0.9s 0.82s ease forwards;
+    }
+    .progress-label {
+      display: flex; justify-content: space-between;
+      font-size: 0.55rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 0.6rem;
+    }
+    .progress-label span { color: var(--gold); }
+    .progress-track {
+      width: 100%; height: 1px;
+      background: rgba(201,168,76,0.15);
+      position: relative; overflow: hidden;
+    }
+    .progress-fill {
+      position: absolute; top: 0; left: 0;
+      height: 100%; width: 0;
+      background: linear-gradient(90deg, var(--gold), var(--gold2));
+      animation: fillBar 2.5s 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    .progress-glow {
+      position: absolute; top: -1px; right: 0;
+      width: 12px; height: 3px;
+      background: var(--gold2);
+      filter: blur(3px);
+      animation: fillBar 2.5s 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    /* ── CTA ── */
+    .cta {
+      display: inline-flex; align-items: center; gap: 1rem;
+      padding: 1rem 2.5rem;
+      border: 1px solid var(--gold);
+      color: var(--gold); text-decoration: none;
+      font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase;
+      transition: background 0.35s, color 0.35s;
+      opacity: 0; animation: fadeUp 0.9s 0.9s ease forwards;
+    }
+    .cta:hover { background: var(--gold); color: var(--black); }
+    .cta::after { content: '→'; transition: transform 0.3s; }
+    .cta:hover::after { transform: translateX(5px); }
+
+    /* ── FOOTER ── */
+    .foot {
+      position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      font-size: 0.52rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--muted); white-space: nowrap;
+      opacity: 0; animation: fadeUp 0.9s 1.1s ease forwards;
+    }
+
+    /* ── KEYFRAMES ── */
+    @keyframes fadeUp   { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeDown { from { opacity:0; transform:translateX(-50%) translateY(-14px); } to { opacity:1; transform:translateX(-50%) translateY(0); } }
+    @keyframes spin     { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
+    @keyframes fillBar  { from { width:0; } to { width: 78%; } }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .ring-1, .ring-2, .ring-3 { display: none; }
+      html, body { overflow: auto; }
+      .wrapper { height: auto; min-height: 100vh; padding: 6rem 1.5rem 4rem; }
+    }
+  </style>
 </head>
 <body>
 
-<!-- Custom cursor -->
-<div id="cursor"></div>
-<div id="cursor-ring"></div>
+  <!-- Cursor -->
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
 
-<!-- NAV -->
-<nav id="navbar">
-  <a href="#s0" class="nav-logo">JeffMon</a>
-  <ul class="nav-links">
-    <li><a href="#s1">Briefing</a></li>
-    <li><a href="#s2">Universe</a></li>
-    <li><a href="#s3">About</a></li>
-    <li><a href="#s4">Philosophy</a></li>
-    <li><a href="#s5">Methodology</a></li>
-    <li><a href="#s6">Performance</a></li>
-    <li><a href="#s7">Team</a></li>
-    <li><a href="#s8">Contact</a></li>
-  </ul>
-</nav>
+  <!-- Background -->
+  <div class="bg-radial"></div>
+  <div class="ring ring-1"></div>
+  <div class="ring ring-2"></div>
+  <div class="ring ring-3"></div>
 
-<!-- SCROLL COUNTER -->
-<div class="scroll-counter"><span id="sc-num">01</span> / 09</div>
+  <!-- Corner brackets -->
+  <div class="corner c-tl"></div>
+  <div class="corner c-tr"></div>
+  <div class="corner c-bl"></div>
+  <div class="corner c-br"></div>
 
-<!-- ════════════════════════════════════════
-     S0 — HERO
-════════════════════════════════════════ -->
-<section id="s0" class="panel">
+  <!-- Logo -->
+  <a href="/" class="logo">JeffMon Alternative Investments</a>
 
-  <!-- Decorative background elements -->
-  <div class="deco deco-text"   style="right:-5vw;top:50%;transform:translateY(-50%)">JM</div>
-  <div class="deco deco-circle" style="width:600px;height:600px;right:-200px;top:50%;transform:translateY(-50%);animation:rotateSlow 40s linear infinite"></div>
-  <div class="deco deco-circle" style="width:350px;height:350px;right:50px;top:50%;transform:translateY(-50%);animation:rotateSlow 25s linear infinite reverse"></div>
-  <div class="deco deco-symbol" style="top:20%;left:50%;font-size:1.5rem">◈</div>
-  <div class="deco deco-symbol" style="bottom:30%;left:45%;font-size:1rem">∑</div>
-  <div class="deco deco-line"   style="height:180px;right:35%;top:10%"></div>
-  <div class="deco deco-dots"   style="bottom:15%;left:4vw">
-    <div class="deco-dot"></div><div class="deco-dot"></div><div class="deco-dot"></div>
-    <div class="deco-dot"></div><div class="deco-dot"></div><div class="deco-dot"></div>
-    <div class="deco-dot"></div><div class="deco-dot"></div><div class="deco-dot"></div>
-    <div class="deco-dot"></div><div class="deco-dot"></div><div class="deco-dot"></div>
-  </div>
+  <!-- Main content -->
+  <div class="wrapper">
 
-  <div class="hero-content">
-    <div class="hero-eyebrow">Dubai International Financial Centre</div>
-    <h1 class="hero-h1">
-      Invest in your<br>
-      <em>future</em>
-      <span class="line2">with confidence</span>
+    <div class="symbol">◈</div>
+
+    <div class="eyebrow">Scheduled Maintenance</div>
+
+    <h1 class="heading">
+      We'll be back<br>
+      <em>shortly</em>
     </h1>
-    <p class="hero-sub">
-      Bespoke discretionary and advisory investment strategies across global markets —
-      built for discerning individuals and family offices.
+    <p class="subheading">Something exceptional is being prepared.</p>
+
+    <div class="gold-line"></div>
+
+    <p class="body-text">
+      Our platform is currently undergoing scheduled maintenance
+      to bring you an elevated experience. Our investment strategies
+      and client services remain fully operational during this time.
     </p>
-    <a href="#s1" class="hero-cta">Discover Our Approach</a>
-  </div>
 
-  <div class="hero-stats">
-    <div>
-      <span class="h-stat-num">20.4%</span>
-      <span class="h-stat-label">CY 2025 Return</span>
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span>Progress</span>
+        <span id="pct">0%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill"></div>
+        <div class="progress-glow"></div>
+      </div>
     </div>
-    <div>
-      <span class="h-stat-num">&gt;2</span>
-      <span class="h-stat-label">Sharpe Ratio</span>
-    </div>
-    <div>
-      <span class="h-stat-num">20+</span>
-      <span class="h-stat-label">Yrs Experience</span>
-    </div>
-  </div>
 
-  <div class="scroll-cue">
-    <div class="scroll-line"></div>
-    scroll to explore
-  </div>
-</section>
-
-<!-- ════════════════════════════════════════
-     S1 — DAILY BRIEFING
-════════════════════════════════════════ -->
-<section id="s1" class="panel">
-  <div class="deco deco-text" style="right:-4vw;top:50%;transform:translateY(-50%)">01</div>
-  <div class="brief-wrap">
-    <div class="reveal">
-      <div class="section-tag">Daily Intelligence</div>
-      <h2 class="section-h">Market <em>Briefing</em> — 3 March 2026</h2>
-    </div>
-    <div class="analysis-box reveal">
-      <div class="analysis-label">◈ &nbsp; JeffMon AI Analysis</div>
-      <div class="analysis-text" id="analysis-text"></div>
-    </div>
-    <div class="articles-grid reveal" id="articles-grid"></div>
-    <p style="font-size:0.6rem;color:var(--muted);margin-top:1.5rem;text-align:center;font-style:italic">
-      Market data sourced from Yahoo Finance, CNBC and Bloomberg. Refreshes at 07:00 &amp; 19:00 GST.
-    </p>
-  </div>
-</section>
-
-<!-- ════════════════════════════════════════
-     S2 — STOCKS / MAG 7
-════════════════════════════════════════ -->
-<section id="s2" class="panel">
-  <div class="deco deco-text" style="left:-4vw;top:50%;transform:translateY(-50%)">02</div>
-  <div class="stocks-wrap">
-    <div class="reveal">
-      <div class="section-tag">Stock Universe</div>
-      <h2 class="section-h">Magnificent <em>Seven</em> — Live Coverage</h2>
-      <p class="section-p" style="max-width:580px">
-        High-conviction positions in the world's most transformative technology companies.
-        Prices update every 60 seconds during market hours.
-      </p>
-    </div>
-    <div class="stocks-meta-row reveal">
-      <div class="live-badge"><div class="live-dot"></div> Live Market Data</div>
-      <span style="font-size:0.6rem;color:var(--muted)" id="stock-time">Fetching...</span>
-    </div>
-    <div style="overflow-x:auto" class="reveal">
-      <table class="s-table">
-        <thead>
-          <tr>
-            <th>Company</th>
-            <th>Ticker</th>
-            <th>Price (USD)</th>
-            <th>Day Change</th>
-            <th>Market Cap</th>
-            <th>P/E Ratio</th>
-            <th>Conviction</th>
-          </tr>
-        </thead>
-        <tbody id="stock-tbody">
-          <tr>
-            <td colspan="7" style="padding:3rem;text-align:center;color:var(--muted);font-size:0.75rem">
-              Loading live market data...
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section>
-
-<!-- ════════════════════════════════════════
-     S3 — ABOUT
-════════════════════════════════════════ -->
-<section id="s3" class="panel">
-  <div class="deco deco-circle" style="width:500px;height:500px;left:-200px;top:50%;transform:translateY(-50%);opacity:0.4"></div>
-  <div class="about-grid">
-    <div class="about-left reveal-left">
-      <span class="big-num">03</span>
-      <div class="section-tag">About Us</div>
-      <h2 class="section-h">A boutique built<br>for <em>exceptional</em> clients</h2>
-      <div class="gold-divider"></div>
-      <p class="section-p">
-        JeffMon Alternative Investments is a Dubai-based asset management firm founded by
-        Mohammad Ali Jaffery and Murtaza Memon, CFA, built to deliver bespoke discretionary
-        and advisory investment strategies across global markets.
-      </p>
-      <p class="section-p">
-        We work with discerning individuals and family offices who want more than off-the-shelf
-        solutions. Portfolios aren't slotted into risk buckets — they are built from scratch,
-        shaped by research, tailored to each client's goals.
-      </p>
-    </div>
-    <div class="about-right reveal-right">
-      <div class="pillar-list">
-        <div class="pillar">
-          <div class="pillar-t">Tailored &amp; Flexible</div>
-          <div class="pillar-d">Bespoke portfolios designed from scratch to match your objectives and risk profile — with tactical flexibility to scale exposure as markets shift.</div>
-        </div>
-        <div class="pillar">
-          <div class="pillar-t">Selective Conviction</div>
-          <div class="pillar-d">Selectivity over diversification: we focus capital on our highest-conviction opportunities across global equities, bonds, and commodities.</div>
-        </div>
-        <div class="pillar">
-          <div class="pillar-t">Aligned &amp; Informed</div>
-          <div class="pillar-d">Clients retain full custody and access to their advisor and research. No product push — just independent advice built around your goals.</div>
-        </div>
-        <div class="pillar">
-          <div class="pillar-t">Macro-Informed, Fundamentally Selective</div>
-          <div class="pillar-d">We research and identify strategic themes early — selecting the companies best positioned to win within them. Proactive, not reactive.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ════════════════════════════════════════
-     S4 — PHILOSOPHY
-════════════════════════════════════════ -->
-<section id="s4" class="panel">
-  <div class="philosophy-wrap">
-    <div class="section-tag reveal" style="justify-content:center;margin-bottom:1.5rem">
-      Our Philosophy
-    </div>
-    <h2 class="phil-title reveal">Anticipate. <em>Balance.</em> Select.</h2>
-    <div class="phil-grid reveal">
-      <div class="phil-card">
-        <span class="phil-num">I</span>
-        <div class="phil-t">Anticipate, Don't React</div>
-        <div class="phil-d">Proactive strategies looking 2–3 years ahead allow us to stay ahead of market changes and seize opportunities before consensus catches up.</div>
-      </div>
-      <div class="phil-card">
-        <span class="phil-num">II</span>
-        <div class="phil-t">Balance is Key</div>
-        <div class="phil-d">We combine gold, high-quality equities, fixed income, and tactical cash to both protect and grow capital across all market regimes.</div>
-      </div>
-      <div class="phil-card">
-        <span class="phil-num">III</span>
-        <div class="phil-t">Macro-Informed Selection</div>
-        <div class="phil-d">We identify strategic themes early and select the companies best positioned to win within them — conviction backed by rigorous bottom-up research.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ════════════════════════════════════════
-     S5 — METHODOLOGY
-════════════════════════════════════════ -->
-<section id="s5" class="panel">
-  <div class="deco deco-text" style="right:-4vw;bottom:-5rem;font-size:clamp(5rem,15vw,18rem)">05</div>
-  <div class="method-wrap">
-    <div class="method-header reveal">
-      <div class="section-tag">Investment Process</div>
-      <h2 class="section-h" style="max-width:600px">From macro to <em>conviction</em> — our six-step framework</h2>
-    </div>
-    <div class="method-steps">
-      <div class="m-step reveal">
-        <div class="m-step-num">01</div>
-        <div class="m-step-body">
-          <div class="m-step-t">Determine Economic Trends</div>
-          <div class="m-step-d">The investment team first meets to analyse the macro-economical situation and determine relevant market trends, positioning 2–3 years ahead of consensus.</div>
-        </div>
-      </div>
-      <div class="m-step reveal">
-        <div class="m-step-num">02</div>
-        <div class="m-step-body">
-          <div class="m-step-t">Asset Allocation Decisions</div>
-          <div class="m-step-d">Based on the macro environment, we decide asset allocation across asset classes, geographies and sectors with secular tailwinds.</div>
-        </div>
-      </div>
-      <div class="m-step reveal">
-        <div class="m-step-num">03</div>
-        <div class="m-step-body">
-          <div class="m-step-t">Screening Process</div>
-          <div class="m-step-d">Once sectors are identified, rigorous fundamental research begins to screen and select potential winners within each sector.</div>
-        </div>
-      </div>
-      <div class="m-step reveal">
-        <div class="m-step-num">04</div>
-        <div class="m-step-body">
-          <div class="m-step-t">Evaluate Company Fundamentals</div>
-          <div class="m-step-d">Our research team analyses company financials, 10-Ks, 10-Qs, and earnings calls to understand the direction of each company.</div>
-        </div>
-      </div>
-      <div class="m-step reveal">
-        <div class="m-step-num">05</div>
-        <div class="m-step-body">
-          <div class="m-step-t">Create Proprietary Model</div>
-          <div class="m-step-d">Analysts create a proprietary model for each company to forecast its performance and perform detailed valuation exercises.</div>
-        </div>
-      </div>
-      <div class="m-step reveal">
-        <div class="m-step-num">06</div>
-        <div class="m-step-body">
-          <div class="m-step-t">Final Selection &amp; Decision</div>
-          <div class="m-step-d">Final selection is presented to the investment committee where the thesis and financials undergo a rigorous vetting process before capital is deployed.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ════════════════════════════════════════
-     S6 — PERFORMANCE
-════════════════════════════════════════ -->
-<section id="s6" class="panel">
-  <div class="deco deco-text" style="left:-4vw;top:50%;transform:translateY(-50%)">06</div>
-  <div class="perf-wrap">
-    <div class="reveal">
-      <div class="section-tag">Track Record</div>
-      <h2 class="section-h">Stability, resilience<br>and <em>steady growth</em></h2>
-    </div>
-    <div class="perf-hero-row reveal">
-      <div class="perf-hero-box">
-        <span class="perf-big">20.4%</span>
-        <span class="perf-lbl">CY 2025 Return (TW)</span>
-        <div class="perf-note">Conservative portfolio</div>
-      </div>
-      <div class="perf-hero-box">
-        <span class="perf-big">&gt;2</span>
-        <span class="perf-lbl">Sharpe Ratio</span>
-        <div class="perf-note">High returns, low volatility</div>
-      </div>
-      <div class="perf-hero-box">
-        <span class="perf-big">-0.69%</span>
-        <span class="perf-lbl">Max Monthly Drawdown</span>
-        <div class="perf-note">vs -5.8% S&amp;P 500 (Mar 2025)</div>
-      </div>
-    </div>
-    <div class="reveal" style="overflow-x:auto">
-      <p style="font-size:0.78rem;color:var(--cream2);margin-bottom:1.5rem;line-height:1.9;max-width:700px">
-        Our investment management team's heritage at Vitality Capital — consistently outperforming
-        major global indices, including posting <strong style="color:var(--gold)">+11%</strong>
-        when the Nasdaq fell -33% in 2022.
-      </p>
-      <table class="v-table">
-        <thead>
-          <tr>
-            <th>Year</th>
-            <th>Vitality Capital</th>
-            <th>Nasdaq</th>
-            <th>S&amp;P 500</th>
-            <th>Dow Jones</th>
-            <th>Russell 2000</th>
-            <th>MSCI World</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>2019*</td><td class="v-gold">11%</td><td>16%</td><td>14%</td><td>10%</td><td>8%</td><td>12%</td></tr>
-          <tr><td>2020</td><td class="v-gold">77%</td><td class="v-green">44%</td><td class="v-green">16%</td><td class="v-green">7%</td><td class="v-green">18%</td><td class="v-green">14%</td></tr>
-          <tr><td>2021</td><td class="v-gold">18%</td><td>21%</td><td>27%</td><td>19%</td><td>14%</td><td>20%</td></tr>
-          <tr><td>2022</td><td class="v-gold">+11%</td><td class="v-red">-33%</td><td class="v-red">-19%</td><td class="v-red">-9%</td><td class="v-red">-22%</td><td class="v-red">-20%</td></tr>
-        </tbody>
-      </table>
-      <p style="font-size:0.62rem;color:var(--muted);margin-top:1.2rem;font-style:italic;text-align:center">
-        * 2019 partial year. Performance reflects actual portfolios managed under Vitality Capital New York / Perpetua Alternative Investments.
-      </p>
-    </div>
-  </div>
-</section>
-
-<!-- ════════════════════════════════════════
-     S7 — TEAM
-════════════════════════════════════════ -->
-<section id="s7" class="panel">
-  <div class="deco deco-text" style="right:-4vw;top:50%;transform:translateY(-50%)">07</div>
-  <div class="team-wrap">
-    <div class="reveal">
-      <div class="section-tag">Our People</div>
-      <h2 class="section-h">Led by <em>experienced</em><br>professionals</h2>
-    </div>
-    <div class="team-sub-label">Management Team</div>
-    <div class="team-grid-3 reveal">
-      <div class="t-card">
-        <div class="t-av">MJ</div>
-        <div class="t-name">Mohammad Ali Jaffery</div>
-        <div class="t-role">Chief Executive Officer</div>
-        <div class="t-exp">20+ years · Pakistan</div>
-        <div class="t-bio">Over 20 years of wealth management and private banking at ABN AMRO, Citibank N.A., and Royal Bank of Scotland. Co-founded Perpetua Wealth in DIFC Dubai. BSc (Hons) from the London School of Economics.</div>
-      </div>
-      <div class="t-card">
-        <div class="t-av">MM</div>
-        <div class="t-name">Murtaza Memon, CFA</div>
-        <div class="t-role">Chief Investment Officer</div>
-        <div class="t-exp">20+ years · United Kingdom</div>
-        <div class="t-bio">Founding member of Vitality Capital New York. CFA Charterholder, MBA from IBA Karachi. Director of Manba Capital Ltd (UK). Deep expertise in high-conviction global equities research.</div>
-      </div>
-      <div class="t-card">
-        <div class="t-av">AS</div>
-        <div class="t-name">Aleyeldin Shaaban</div>
-        <div class="t-role">Senior Executive Officer</div>
-        <div class="t-exp">25+ years · Egypt</div>
-        <div class="t-bio">Founder of Capricorns Consultancy UAE. 26+ years of Institutional, Corporate and Investment Banking at Mashreq Bank, ADCB, and HSBC across Egypt, UAE, Qatar and KSA.</div>
-      </div>
-    </div>
-    <div class="team-sub-label">Non-Executive Directors</div>
-    <div class="team-grid-2 reveal">
-      <div class="t-card">
-        <div class="t-av">KM</div>
-        <div class="t-name">Khaled Abdel Majeed</div>
-        <div class="t-role">Non-Executive Director</div>
-        <div class="t-exp">30+ years · MENA Markets</div>
-        <div class="t-bio">Founded MENA Capital hedge fund ($500M+ AUM). Former CIO at EFG Hermes Asset Management. Columbia MBA. Boards include Lundy Private Credit and Jordan International Insurance.</div>
-      </div>
-      <div class="t-card">
-        <div class="t-av">SB</div>
-        <div class="t-name">Siddik Bakir</div>
-        <div class="t-role">Non-Executive Director</div>
-        <div class="t-exp">20+ years · Energy Strategy</div>
-        <div class="t-bio">CEO of Majlis Energy Advisory. Former Director of Oil Strategy at Saudi Ministry of Energy and Saudi Aramco expert. Oxford graduate. Two decades at the intersection of energy economics and geopolitics.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ════════════════════════════════════════
-     S8 — CONTACT
-════════════════════════════════════════ -->
-<section id="s8" class="panel">
-  <div class="deco deco-circle" style="width:500px;height:500px;left:-200px;top:50%;transform:translateY(-50%);opacity:0.4"></div>
-  <div class="deco deco-circle" style="width:400px;height:400px;left:50%;top:50%;transform:translate(-50%,-50%)"></div>
-  <div class="deco deco-symbol" style="top:20%;left:20%;font-size:2rem;opacity:0.2">◈</div>
-  <div class="deco deco-symbol" style="bottom:25%;right:22%;font-size:1.5rem;opacity:0.15">∑</div>
-  <div class="contact-wrap reveal">
-    <div class="section-tag" style="justify-content:center">Get In Touch</div>
-    <h2 class="contact-h">Begin the<br><em>conversation</em></h2>
-    <p class="contact-sub">
-      We work exclusively with professional investors. If you are a discerning individual
-      or family office seeking a bespoke investment partnership, we invite you to reach out.
-    </p>
-    <div class="contact-items">
-      <div class="contact-item">
-        <div class="c-icon">✉</div>
-        <a href="mailto:mohammad.jaffery@perpetua-investments.com" class="c-link">
-          mohammad.jaffery@perpetua-investments.com
-        </a>
-      </div>
-      <div class="contact-item">
-        <div class="c-icon">✉</div>
-        <a href="mailto:murtaza.memon@perpetua-investments.com" class="c-link">
-          murtaza.memon@perpetua-investments.com
-        </a>
-      </div>
-      <div class="contact-item">
-        <div class="c-icon">☎</div>
-        <span>+971 52 969 3000</span>
-      </div>
-    </div>
-    <a href="mailto:mohammad.jaffery@perpetua-investments.com" class="contact-cta">
-      Request a Meeting →
+    <a href="mailto:mohammad.jaffery@perpetua-investments.com" class="cta">
+      Contact Our Team
     </a>
+
   </div>
-</section>
 
-<!-- DISCLAIMER -->
-<div class="disclaimer">
-  <strong style="color:var(--cream2)">Disclaimer:</strong> JeffMon Alternative Investments is in the
-  process of obtaining regulatory approval from the DFSA. The firm is not yet licensed and does not
-  currently offer financial services. Performance shown reflects actual portfolios managed under Perpetua
-  Alternative Investments, which will transition to JeffMon post-licensing. This material is intended for
-  professional investors only and does not constitute investment advice or an offer to transact.
-  Past performance is not indicative of future results.
-</div>
+  <!-- Footer -->
+  <div class="foot">
+    Dubai International Financial Centre &nbsp;·&nbsp; © 2026 JeffMon
+  </div>
 
-<!-- FOOTER -->
-<footer>
-  <div class="f-logo">JEFFMON</div>
-  <div class="f-copy">STRICTLY PRIVATE &amp; CONFIDENTIAL &nbsp;·&nbsp; DUBAI INTERNATIONAL FINANCIAL CENTRE &nbsp;·&nbsp; © 2026</div>
-</footer>
+  <script>
+    // ── CUSTOM CURSOR ──
+    const cur  = document.getElementById('cursor');
+    const ring = document.getElementById('cursor-ring');
+    let mx = 0, my = 0, rx = 0, ry = 0;
 
-<script src="main.js"></script>
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cur.style.left = mx + 'px';
+      cur.style.top  = my + 'px';
+    });
+
+    (function loop() {
+      rx += (mx - rx) * 0.1;
+      ry += (my - ry) * 0.1;
+      ring.style.left = rx + 'px';
+      ring.style.top  = ry + 'px';
+      requestAnimationFrame(loop);
+    })();
+
+    document.querySelectorAll('a').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cur.style.transform  = 'translate(-50%,-50%) scale(2.5)';
+        ring.style.width     = '56px';
+        ring.style.height    = '56px';
+      });
+      el.addEventListener('mouseleave', () => {
+        cur.style.transform  = 'translate(-50%,-50%) scale(1)';
+        ring.style.width     = '34px';
+        ring.style.height    = '34px';
+      });
+    });
+
+    // ── PROGRESS COUNTER ──
+    const pctEl = document.getElementById('pct');
+    const target = 78;
+    let current = 0;
+    const delay = 1200; // match CSS animation delay
+    setTimeout(() => {
+      const duration = 2500;
+      const steps    = 60;
+      const interval = duration / steps;
+      const increment = target / steps;
+      const timer = setInterval(() => {
+        current = Math.min(current + increment, target);
+        pctEl.textContent = Math.round(current) + '%';
+        if (current >= target) clearInterval(timer);
+      }, interval);
+    }, delay);
+  </script>
+
 </body>
 </html>
