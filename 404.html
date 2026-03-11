@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Unavailable — JeffMon Alternative Investments</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,200;0,300;0,400;1,200;1,300&family=Cinzel:wght@400;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:  #080808;
+      --black2: #0f0f0f;
+      --gold:   #c9a84c;
+      --gold2:  #e8c96a;
+      --cream:  #f0e6cc;
+      --cream2: #b0a080;
+      --muted:  #5a5040;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--black);
+      color: var(--cream);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300;
+      overflow: hidden;
+      cursor: none;
+    }
+
+    /* ── CURSOR ── */
+    #cur  { position:fixed;width:8px;height:8px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform 0.15s,width 0.3s,height 0.3s; }
+    #ring { position:fixed;width:32px;height:32px;border:1px solid rgba(201,168,76,0.45);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width 0.3s,height 0.3s; }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content:'';position:fixed;inset:0;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity:0.025;pointer-events:none;z-index:9997;
+    }
+
+    /* ── BACKGROUND GLOW ── */
+    .bg-glow {
+      position: fixed; inset: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 50%, rgba(201,168,76,0.04) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 20% 80%, rgba(201,168,76,0.02) 0%, transparent 60%);
+    }
+
+    /* ── ROTATING RING DECO ── */
+    .deco-ring {
+      position: fixed;
+      border-radius: 50%;
+      border: 1px solid rgba(201,168,76,0.08);
+      pointer-events: none;
+    }
+    .ring-1 { width:700px;height:700px;top:50%;left:50%;margin:-350px 0 0 -350px; animation: spin 60s linear infinite; }
+    .ring-2 { width:500px;height:500px;top:50%;left:50%;margin:-250px 0 0 -250px; animation: spin 40s linear infinite reverse; }
+    .ring-3 { width:300px;height:300px;top:50%;left:50%;margin:-150px 0 0 -150px; animation: spin 25s linear infinite; }
+
+    /* ── LAYOUT ── */
+    .wrapper {
+      position: relative; z-index: 10;
+      height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    /* ── LOGO ── */
+    .logo {
+      position: fixed; top: 2rem; left: 50%; transform: translateX(-50%);
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem; letter-spacing: 0.3em;
+      color: var(--gold); text-decoration: none;
+      text-transform: uppercase;
+      opacity: 0; animation: fadeUp 0.8s 0.2s ease forwards;
+    }
+
+    /* ── BIG NUMBER ── */
+    .big-num {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(7rem, 18vw, 14rem);
+      font-weight: 600;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(201,168,76,0.2);
+      line-height: 1;
+      letter-spacing: -0.02em;
+      display: block;
+      opacity: 0; animation: fadeUp 1s 0.3s ease forwards;
+      user-select: none;
+    }
+
+    /* ── DIVIDER LINE ── */
+    .divider {
+      width: 60px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 2rem auto;
+      opacity: 0; animation: fadeUp 1s 0.5s ease forwards;
+    }
+
+    /* ── EYEBROW ── */
+    .eyebrow {
+      font-size: 0.58rem; letter-spacing: 0.4em;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 1.2rem;
+      display: flex; align-items: center; justify-content: center; gap: 1rem;
+      opacity: 0; animation: fadeUp 1s 0.55s ease forwards;
+    }
+    .eyebrow::before, .eyebrow::after {
+      content: ''; display: block; width: 24px; height: 1px; background: var(--gold);
+    }
+
+    /* ── HEADING ── */
+    .heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 200; line-height: 1.2;
+      color: #fff; margin-bottom: 1.2rem;
+      opacity: 0; animation: fadeUp 1s 0.65s ease forwards;
+    }
+    .heading em { font-style: italic; color: var(--gold); }
+
+    /* ── BODY TEXT ── */
+    .body-text {
+      font-size: 0.82rem; line-height: 1.9;
+      color: var(--cream2); max-width: 480px;
+      margin: 0 auto 2.5rem;
+      opacity: 0; animation: fadeUp 1s 0.75s ease forwards;
+    }
+
+    /* ── CTA ── */
+    .cta {
+      display: inline-flex; align-items: center; gap: 1rem;
+      padding: 1rem 2.5rem;
+      border: 1px solid var(--gold);
+      color: var(--gold); text-decoration: none;
+      font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase;
+      transition: background 0.35s, color 0.35s;
+      opacity: 0; animation: fadeUp 1s 0.85s ease forwards;
+    }
+    .cta:hover { background: var(--gold); color: var(--black); }
+    .cta::after { content: '→'; transition: transform 0.3s; }
+    .cta:hover::after { transform: translateX(5px); }
+
+    /* ── FOOTER NOTE ── */
+    .foot-note {
+      position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      font-size: 0.55rem; letter-spacing: 0.18em;
+      color: var(--muted); text-transform: uppercase; white-space: nowrap;
+      opacity: 0; animation: fadeUp 1s 1s ease forwards;
+    }
+
+    /* ── CORNER DECO ── */
+    .corner {
+      position: fixed;
+      width: 40px; height: 40px;
+      opacity: 0; animation: fadeUp 1s 1s ease forwards;
+    }
+    .corner-tl { top:1.5rem;left:1.5rem; border-top:1px solid rgba(201,168,76,0.3); border-left:1px solid rgba(201,168,76,0.3); }
+    .corner-tr { top:1.5rem;right:1.5rem; border-top:1px solid rgba(201,168,76,0.3); border-right:1px solid rgba(201,168,76,0.3); }
+    .corner-bl { bottom:1.5rem;left:1.5rem; border-bottom:1px solid rgba(201,168,76,0.3); border-left:1px solid rgba(201,168,76,0.3); }
+    .corner-br { bottom:1.5rem;right:1.5rem; border-bottom:1px solid rgba(201,168,76,0.3); border-right:1px solid rgba(201,168,76,0.3); }
+
+    /* ── KEYFRAMES ── */
+    @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes spin   { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+
+    @media (max-width: 600px) {
+      .ring-1,.ring-2,.ring-3 { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="cur"></div>
+  <div id="ring"></div>
+
+  <div class="bg-glow"></div>
+  <div class="deco-ring ring-1"></div>
+  <div class="deco-ring ring-2"></div>
+  <div class="deco-ring ring-3"></div>
+
+  <!-- Corner brackets -->
+  <div class="corner corner-tl"></div>
+  <div class="corner corner-tr"></div>
+  <div class="corner corner-bl"></div>
+  <div class="corner corner-br"></div>
+
+  <a href="/" class="logo">JeffMon</a>
+
+  <div class="wrapper">
+    <span class="big-num">404</span>
+    <div class="divider"></div>
+    <div class="eyebrow">Page Unavailable</div>
+    <h1 class="heading">
+      This page is temporarily<br><em>offline</em>
+    </h1>
+    <p class="body-text">
+      JeffMon Alternative Investments is currently undergoing updates.
+      Our investment strategies and client services remain fully operational.
+      Please return shortly or reach us directly.
+    </p>
+    <a href="mailto:mohammad.jaffery@perpetua-investments.com" class="cta">
+      Contact Our Team
+    </a>
+  </div>
+
+  <div class="foot-note">
+    Dubai International Financial Centre &nbsp;·&nbsp; © 2026 JeffMon
+  </div>
+
+  <script>
+    // Custom cursor
+    const cur = document.getElementById('cur');
+    const ring = document.getElementById('ring');
+    let mx=0,my=0,rx=0,ry=0;
+    document.addEventListener('mousemove', e => {
+      mx=e.clientX; my=e.clientY;
+      cur.style.left=mx+'px'; cur.style.top=my+'px';
+    });
+    (function loop() {
+      rx+=(mx-rx)*0.1; ry+=(my-ry)*0.1;
+      ring.style.left=rx+'px'; ring.style.top=ry+'px';
+      requestAnimationFrame(loop);
+    })();
+    document.querySelectorAll('a').forEach(el => {
+      el.addEventListener('mouseenter', () => { cur.style.transform='translate(-50%,-50%) scale(2.5)'; ring.style.width='56px'; ring.style.height='56px'; });
+      el.addEventListener('mouseleave', () => { cur.style.transform='translate(-50%,-50%) scale(1)';   ring.style.width='32px'; ring.style.height='32px'; });
+    });
+  </script>
+</body>
+</html>
