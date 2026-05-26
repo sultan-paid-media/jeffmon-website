@@ -20,14 +20,14 @@ animateRing();
 
 document.querySelectorAll('a, button, .t-card, .art-card, .m-step, .phil-card').forEach(el => {
   el.addEventListener('mouseenter', () => {
-    cur.style.transform  = 'translate(-50%,-50%) scale(2.5)';
-    ring.style.width     = '60px';
-    ring.style.height    = '60px';
+    cur.style.transform = 'translate(-50%,-50%) scale(2.5)';
+    ring.style.width    = '60px';
+    ring.style.height   = '60px';
   });
   el.addEventListener('mouseleave', () => {
-    cur.style.transform  = 'translate(-50%,-50%) scale(1)';
-    ring.style.width     = '36px';
-    ring.style.height    = '36px';
+    cur.style.transform = 'translate(-50%,-50%) scale(1)';
+    ring.style.width    = '36px';
+    ring.style.height   = '36px';
   });
 });
 
@@ -35,14 +35,11 @@ document.querySelectorAll('a, button, .t-card, .art-card, .m-step, .phil-card').
 const navbar = document.getElementById('navbar');
 window.addEventListener('scroll', () => {
   navbar.classList.toggle('solid', window.scrollY > 80);
-
   const sections = ['s0','s1','s2','s3','s4','s5','s6','s7','s8'];
   let current = 1;
   sections.forEach((id, i) => {
     const el = document.getElementById(id);
-    if (el && el.getBoundingClientRect().top <= window.innerHeight / 2) {
-      current = i + 1;
-    }
+    if (el && el.getBoundingClientRect().top <= window.innerHeight / 2) current = i + 1;
   });
   const scNum = document.getElementById('sc-num');
   if (scNum) scNum.textContent = String(current).padStart(2, '0');
@@ -51,9 +48,7 @@ window.addEventListener('scroll', () => {
 // ── REVEAL ON SCROLL ──
 const reveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
 const revObs  = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) e.target.classList.add('visible');
-  });
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
 }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
 reveals.forEach(el => revObs.observe(el));
 
@@ -96,9 +91,7 @@ async function fetchStock(t) {
       mcap:  m.marketCap,
       pe:    m.trailingPE || null,
     };
-  } catch (e) {
-    return null;
-  }
+  } catch (e) { return null; }
 }
 
 async function loadStocks() {
@@ -107,10 +100,7 @@ async function loadStocks() {
 
   tbody.innerHTML = MAG7.map(s => `
     <tr>
-      <td>
-        <div class="s-name">${s.name}</div>
-        <div class="s-sector">${s.sector}</div>
-      </td>
+      <td><div class="s-name">${s.name}</div><div class="s-sector">${s.sector}</div></td>
       <td><span class="s-ticker">${s.ticker}</span></td>
       <td id="p-${s.ticker}"  class="s-price">—</td>
       <td id="c-${s.ticker}">—</td>
@@ -125,17 +115,14 @@ async function loadStocks() {
   MAG7.forEach((s, i) => {
     const d = results[i];
     if (!d) return;
-
     const chg = d.price - d.prev;
     const pct = (chg / d.prev) * 100;
     const cls = chg >= 0 ? 'up' : 'dn';
     const arr = chg >= 0 ? '▲ ' : '▼ ';
-
     const p  = document.getElementById('p-'  + s.ticker);
     const c  = document.getElementById('c-'  + s.ticker);
     const m  = document.getElementById('m-'  + s.ticker);
     const pe = document.getElementById('pe-' + s.ticker);
-
     if (p)  p.textContent  = fmt(d.price);
     if (c)  c.innerHTML    = `<span class="${cls}">${arr}${Math.abs(pct).toFixed(2)}%</span><br>
                                <small style="color:var(--muted);font-size:0.65rem">${chg >= 0 ? '+' : ''}${fmt(chg)}</small>`;
@@ -144,114 +131,143 @@ async function loadStocks() {
   });
 
   const timeEl = document.getElementById('stock-time');
-  if (timeEl) {
-    timeEl.textContent = 'Updated ' + new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-  }
+  if (timeEl) timeEl.textContent = 'Updated ' + new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 }
 
 loadStocks();
 setInterval(loadStocks, 60000);
 
-// ── BRIEFING: ARTICLES ──
-const ARTICLES = [
-  {
-    src: 'CNBC', code: 'CNBC', dot: 'dot-cnbc',
-    headline: 'Markets recover from 600-point Dow drop as investors buy the dip after US-Iran strikes — Nvidia up nearly 3%',
-    url: 'https://www.cnbc.com/2026/03/01/stock-market-today-live-update.html',
-    tag: 'Markets', tagClass: 'tag-markets'
-  },
-  {
-    src: 'Yahoo Finance', code: 'YF', dot: 'dot-yf',
-    headline: 'Operation Epic Fury: US and Israel strike Iran, killing Supreme Leader Khamenei — what it means for oil markets',
-    url: 'https://finance.yahoo.com/',
-    tag: 'Geopolitics', tagClass: 'tag-geo'
-  },
-  {
-    src: 'Bloomberg', code: 'BB', dot: 'dot-bb',
-    headline: 'Treasury yields tumble to 18-month lows as gold surges on Middle East escalation — flight-to-quality in full force',
-    url: 'https://www.bloomberg.com/news/articles/2026-02-26/asian-stocks-to-ebb-as-nvidia-decline-dulls-mood-markets-wrap',
-    tag: 'Macro', tagClass: 'tag-macro'
-  },
-  {
-    src: 'CNBC', code: 'CNBC', dot: 'dot-cnbc',
-    headline: 'Iran conflict threatens new price pressures even as Trump declares inflation tamed — Fed path now uncertain',
-    url: 'https://www.cnbc.com/',
-    tag: 'Macro', tagClass: 'tag-macro'
-  },
-  {
-    src: 'Yahoo Finance', code: 'YF', dot: 'dot-yf',
-    headline: 'Mag 7 diverges: Nvidia and Microsoft outperform as software rallies — tech seen as relative safe haven',
-    url: 'https://finance.yahoo.com/news/live/stock-market-today-dow-sp-500-nasdaq-fall-to-end-volatile-month-as-ai-worries-buffet-markets-211239963.html',
-    tag: 'Tech', tagClass: 'tag-tech'
-  },
-];
+// ══════════════════════════════════════════════════════
+//  DAILY BRIEFING — AUTO DATE + CLAUDE API
+// ══════════════════════════════════════════════════════
 
-function renderArticles() {
+// ── Step 1: Auto update today's date in heading ──
+function setTodayDate() {
+  const dateEl = document.getElementById('briefing-date');
+  if (!dateEl) return;
+  const today = new Date().toLocaleDateString('en-GB', {
+    day: 'numeric', month: 'long', year: 'numeric'
+  });
+  dateEl.textContent = 'Market Briefing — ' + today;
+}
+setTodayDate();
+
+// ── Step 2: Fetch briefing from Claude API via Netlify Function ──
+async function fetchDailyBriefing() {
+  const today = new Date().toLocaleDateString('en-GB', {
+    day: 'numeric', month: 'long', year: 'numeric'
+  });
+
+  // Check cache — only fetch once per day
+  const cacheKey   = 'jeffmon_briefing_' + new Date().toISOString().split('T')[0];
+  const cached     = sessionStorage.getItem(cacheKey);
+  if (cached) {
+    const parsed = JSON.parse(cached);
+    renderBriefing(parsed.text, parsed.articles);
+    return;
+  }
+
+  // Show loading state
+  const analysisEl = document.getElementById('analysis-text');
+  if (analysisEl) analysisEl.textContent = 'Generating today\'s market briefing...';
+
+  try {
+    const response = await fetch('/.netlify/functions/briefing');
+    if (!response.ok) throw new Error('Function error');
+    const data = await response.json();
+
+    // Cache for this session
+    sessionStorage.setItem(cacheKey, JSON.stringify(data));
+    renderBriefing(data.text, data.articles);
+
+  } catch (err) {
+    console.error('Briefing fetch failed:', err);
+    // Fallback — show placeholder
+    const analysisEl = document.getElementById('analysis-text');
+    if (analysisEl) analysisEl.textContent = 'Market briefing temporarily unavailable. Please check back shortly.';
+  }
+}
+
+// ── Step 3: Render briefing text + articles ──
+function renderBriefing(text, articles) {
+  // Typewriter for analysis text
+  startTypewriter(text);
+
+  // Render article cards
   const g = document.getElementById('articles-grid');
-  if (!g) return;
+  if (!g || !articles) return;
   g.innerHTML = '';
-  ARTICLES.forEach(a => {
-    const el = document.createElement('a');
-    el.href      = a.url;
-    el.target    = '_blank';
-    el.rel       = 'noopener noreferrer';
-    el.className = 'art-card';
-    el.innerHTML = `
+
+  const dotMap = {
+    'CNBC':          { cls: 'dot-cnbc', code: 'CNBC' },
+    'Yahoo Finance': { cls: 'dot-yf',   code: 'YF'   },
+    'Bloomberg':     { cls: 'dot-bb',   code: 'BB'   },
+    'Reuters':       { cls: 'dot-bb',   code: 'RT'   },
+    'FT':            { cls: 'dot-yf',   code: 'FT'   },
+  };
+  const tagMap = {
+    'Markets':    'tag-markets',
+    'Geopolitics':'tag-geo',
+    'Macro':      'tag-macro',
+    'Tech':       'tag-tech',
+    'Energy':     'tag-macro',
+    'Rates':      'tag-markets',
+  };
+
+  articles.forEach(a => {
+    const dot     = dotMap[a.src]  || { cls: 'dot-yf', code: a.src.substring(0,2).toUpperCase() };
+    const tagCls  = tagMap[a.tag]  || 'tag-markets';
+    const el      = document.createElement('a');
+    el.href       = a.url || '#';
+    el.target     = '_blank';
+    el.rel        = 'noopener noreferrer';
+    el.className  = 'art-card';
+    el.innerHTML  = `
       <div class="art-src-row">
-        <div class="art-dot ${a.dot}">${a.code}</div>
+        <div class="art-dot ${dot.cls}">${dot.code}</div>
         <div class="art-src-name">${a.src}</div>
       </div>
       <div class="art-headline">${a.headline}</div>
-      <span class="art-tag ${a.tagClass}">${a.tag}</span>
+      <span class="art-tag ${tagCls}">${a.tag}</span>
       <div class="art-arrow">→</div>
     `;
     g.appendChild(el);
   });
 }
 
-// ── BRIEFING: TYPEWRITER ──
-const BRIEFING_TEXT = "Markets are navigating a sharp risk-off shift following the weekend US-Israeli strikes on Iran — codenamed Operation Epic Fury — which resulted in the death of Supreme Leader Khamenei, the most seismic geopolitical event in decades. The Dow initially fell over 600 points before recovering, with Nvidia gaining nearly 3% and Microsoft rising, suggesting investors are treating the Magnificent 7 as a relative safe haven. Gold has surged and Treasury yields collapsed to 18-month lows — a classic flight-to-quality rotation that validates JeffMon's existing positioning in precious metals and high-grade fixed income. The critical near-term risk is oil price escalation feeding back into inflation expectations, which could force the Fed to pause its rate-cut cycle; monitoring energy prices and the 10-year yield closely this week is essential.";
-
-function startTypewriter() {
+// ── Step 4: Typewriter animation ──
+function startTypewriter(text) {
   const el = document.getElementById('analysis-text');
-  if (!el) return;
+  if (!el || !text) return;
   el.innerHTML = '';
 
-  // Blinking cursor element
   const cursorEl = document.createElement('span');
   cursorEl.className = 'cursor-blink';
   el.appendChild(cursorEl);
 
   let i = 0;
-  const speed = 18; // ms per character
-
   function type() {
-    if (i < BRIEFING_TEXT.length) {
-      // Insert character before the cursor
-      el.insertBefore(document.createTextNode(BRIEFING_TEXT[i]), cursorEl);
+    if (i < text.length) {
+      el.insertBefore(document.createTextNode(text[i]), cursorEl);
       i++;
-      setTimeout(type, speed);
+      setTimeout(type, 16);
     } else {
-      // Remove blinking cursor when done
       cursorEl.remove();
     }
   }
   type();
 }
 
-// ── INIT ──
-renderArticles();
-
-// Start typewriter when the briefing section enters the viewport
+// ── INIT: trigger when briefing section is visible ──
 const briefBox = document.querySelector('.analysis-box');
 if (briefBox) {
   const typingObs = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (e.isIntersecting) {
-        startTypewriter();
+        fetchDailyBriefing();
         typingObs.disconnect();
       }
     });
-  }, { threshold: 0.3 });
+  }, { threshold: 0.2 });
   typingObs.observe(briefBox);
 }
