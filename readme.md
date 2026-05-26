@@ -1,5 +1,5 @@
 git add .
-git commit -m "fix: production corrections"
+git commit -m "main website activated"
 git push origin main
 
 Abhi:
